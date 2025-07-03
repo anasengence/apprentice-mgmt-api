@@ -140,9 +140,13 @@ REST_FRAMEWORK = {
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.AcceptHeaderVersioning",
 }
 
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Apprentice Management API",
-    "VERSION": "1.0.0",
-    "DESCRIPTION": "API for managing apprentices",
-    "SERVE_INCLUDE_SCHEMA": False,
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'jwt': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }

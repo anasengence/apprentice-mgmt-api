@@ -13,8 +13,6 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 
 
 urlpatterns = [
@@ -40,23 +38,4 @@ urlpatterns = [
     path("mentors/<uuid:id>/", MentorDetailAPIView.as_view(), name="mentor-detail"),
     path("trainers/", TrainerListCreateAPIView.as_view(), name="trainer-list-create"),
     path("trainers/<uuid:id>/", TrainerDetailAPIView.as_view(), name="trainer-detail"),
-]
-
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Apprentice Management API",
-        default_version="v1",
-        description="API for managing apprentices, mentors, and trainers",
-    ),
-    public=True,
-    patterns=urlpatterns,  # ← safest: lock it to these patterns
-)
-
-# finally expose the docs
-urlpatterns += [
-    path(
-        "swagger/",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
-    ),
 ]
