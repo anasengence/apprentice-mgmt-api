@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "apprentice-mgmt-api"
+version = "0.1.0"
+description = ""
+authors = ["anasengence <anas.waleed@devsinc.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.2.4"
+djangorestframework = "^3.16.0"
+djangorestframework-simplejwt = "^5.5.0"
+drf-spectacular = "^0.28.0"
+python-decouple = "^3.8"
+django-cors-headers = "^4.7.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+isort = "^6.0.1"
+flake8 = "^7.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
