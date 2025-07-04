@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
-from .models import User, Apprentice, Mentor, Trainer
+from apps.user.models import User, Apprentice, Mentor, Trainer
 import uuid
 from rest_framework_simplejwt.tokens import RefreshToken
 

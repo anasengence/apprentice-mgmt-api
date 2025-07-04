@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project
+from apps.projects.models import Project
 import datetime
 
 

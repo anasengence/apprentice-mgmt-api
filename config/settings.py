@@ -44,12 +44,12 @@ INSTALLED_APPS = [
     "drf_yasg",
     "corsheaders",
     # local apps
-    "user",
-    "projects",
-    "tasks",
-    "rotation",
-    "feedback",
-    "request",
+    "apps.user",
+    "apps.projects",
+    "apps.tasks",
+    "apps.rotation",
+    "apps.feedback",
+    "apps.request",
 ]
 
 MIDDLEWARE = [

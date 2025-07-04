@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Project
+from apps.projects.models import Project
 from .serializers import ProjectReadSerializer, ProjectWriteSerializer
-from core.permissions import IsTrainerOrAdmin
+from apps.core.permissions import IsTrainerOrAdmin
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 

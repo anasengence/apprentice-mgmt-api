@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class RotationConfig(AppConfig):
+class FeedbackConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "rotation"
+    name = "apps.feedback"

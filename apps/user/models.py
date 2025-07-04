@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from apps.projects.models import Project
 
 # ───────────────────────────────────
 # 1. USER MANAGEMENT
@@ -89,7 +90,7 @@ class Mentor(models.Model):
     )
     is_external = models.BooleanField(default=False)
     project = models.ForeignKey(
-        "projects.Project",
+        Project,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -127,7 +128,7 @@ class Apprentice(models.Model):
         related_name="apprentices",
     )
     project = models.ForeignKey(
-        "projects.Project",
+        Project,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

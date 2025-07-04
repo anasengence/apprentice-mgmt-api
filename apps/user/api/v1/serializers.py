@@ -1,8 +1,8 @@
 # serializers.py
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Trainer, Mentor, Apprentice
-from projects.models import Project
+from apps.user.models import Trainer, Mentor, Apprentice
+from apps.projects.models import Project
 
 User = get_user_model()
 
