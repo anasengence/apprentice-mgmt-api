@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import datetime
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -132,6 +132,11 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),  # Typically longer than access token
+    'JWT_ALLOW_REFRESH': True,
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (

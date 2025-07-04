@@ -1,7 +1,7 @@
 from django.urls import path
 from user.views import (
-    UserListCreateAPIView,
-    UserDetailAPIView,
+    # UserListCreateAPIView,
+    # UserDetailAPIView,
     ApprenticeListCreateAPIView,
     ApprenticeDetailAPIView,
     MentorListCreateAPIView,
@@ -22,8 +22,6 @@ urlpatterns = [
         "token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
     ),  # refresh token
     # USERS
-    path("", UserListCreateAPIView.as_view(), name="user-list-create"),
-    path("<uuid:id>/", UserDetailAPIView.as_view(), name="user-detail"),
     path(
         "apprentices/",
         ApprenticeListCreateAPIView.as_view(),

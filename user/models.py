@@ -15,7 +15,6 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_trainer', True)  # Make superuser a trainer by default
         extra_fields.setdefault('is_active', True)
 
         if extra_fields.get('is_staff') is not True:
@@ -27,6 +26,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    username = models.CharField(max_length=150, unique=False, blank=True, null=True)
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
@@ -44,22 +44,22 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
 class Trainer(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="trainer_profile")
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, related_name="trainer_profile")
     
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
 class Mentor(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="mentor_profile")
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, related_name="mentor_profile")
+    trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name="mentors")
     
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
 class Apprentice(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="apprentice_profile")
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, related_name="apprentice_profile")
+    trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, related_name="apprentices_trainer")
+    mentor = models.ForeignKey(Mentor, on_delete=models.CASCADE, related_name="apprentices_mentor")
     
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
