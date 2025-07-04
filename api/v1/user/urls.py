@@ -1,7 +1,5 @@
 from django.urls import path
 from user.views import (
-    # UserListCreateAPIView,
-    # UserDetailAPIView,
     ApprenticeListCreateAPIView,
     ApprenticeDetailAPIView,
     MentorListCreateAPIView,
@@ -21,7 +19,9 @@ urlpatterns = [
     path(
         "token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
     ),  # refresh token
+
     # USERS
+    #  - Apprentice
     path(
         "apprentices/",
         ApprenticeListCreateAPIView.as_view(),
@@ -32,8 +32,12 @@ urlpatterns = [
         ApprenticeDetailAPIView.as_view(),
         name="apprentice-detail",
     ),
+
+    #  - Mentor
     path("mentors/", MentorListCreateAPIView.as_view(), name="mentor-list-create"),
     path("mentors/<uuid:id>/", MentorDetailAPIView.as_view(), name="mentor-detail"),
+
+    #  - Trainer
     path("trainers/", TrainerListCreateAPIView.as_view(), name="trainer-list-create"),
     path("trainers/<uuid:id>/", TrainerDetailAPIView.as_view(), name="trainer-detail"),
 ]

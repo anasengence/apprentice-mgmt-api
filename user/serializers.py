@@ -2,6 +2,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Trainer, Mentor, Apprentice
+from projects.models import Project
 
 User = get_user_model()
 
@@ -9,24 +10,34 @@ User = get_user_model()
 # 1. USER SERIALIZERS
 # ───────────────────────────────────
 
+
 class UserReadSerializer(serializers.ModelSerializer):
     """Returned in all GET responses – never accepted as input."""
+
     class Meta:
-        model  = User
+        model = User
         fields = (
-            "id", "email", "first_name", "last_name",
-            "is_trainer", "is_mentor", "is_apprentice",
-            "is_active", "is_external", "created_at", "updated_at",
+            "id",
+            "email",
+            "first_name",
+            "last_name",
+            "is_trainer",
+            "is_mentor",
+            "is_apprentice",
+            "is_active",
+            "created_at",
+            "updated_at",
         )
         read_only_fields = fields
 
 
 class UserWriteSerializer(serializers.ModelSerializer):
     """Used inside POST / PUT / PATCH payloads."""
+
     password = serializers.CharField(write_only=True, style={"input_type": "password"})
 
     class Meta:
-        model  = User
+        model = User
         fields = ("email", "password", "first_name", "last_name")
 
     def create(self, validated_data):
@@ -47,14 +58,15 @@ class UserWriteSerializer(serializers.ModelSerializer):
 
 
 # ───────────────────────────────────
-# 2. TRAINER
+# 2. TRAINER SERIALIZERS
 # ───────────────────────────────────
+
 
 class TrainerReadSerializer(serializers.ModelSerializer):
     user = UserReadSerializer()
 
     class Meta:
-        model  = Trainer
+        model = Trainer
         fields = ("user",)
 
 
@@ -62,7 +74,7 @@ class TrainerWriteSerializer(serializers.ModelSerializer):
     user = UserWriteSerializer()
 
     class Meta:
-        model  = Trainer
+        model = Trainer
         fields = ("user",)
 
     def create(self, validated_data):
@@ -79,27 +91,28 @@ class TrainerWriteSerializer(serializers.ModelSerializer):
 
 
 # ───────────────────────────────────
-# 3. MENTOR
+# 3. MENTOR SERIALIZERS
 # ───────────────────────────────────
 
+
 class MentorReadSerializer(serializers.ModelSerializer):
-    user    = UserReadSerializer()
+    user = UserReadSerializer()
     trainer = serializers.PrimaryKeyRelatedField(read_only=True)
+    project = serializers.PrimaryKeyRelatedField(read_only=True)
+    apprentice = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
 
     class Meta:
-        model  = Mentor
-        fields = ("user", "trainer")
+        model = Mentor
+        fields = ("user", "trainer", "is_external", "project", "apprentice")
 
 
 class MentorWriteSerializer(serializers.ModelSerializer):
-    user    = UserWriteSerializer()
-    trainer = serializers.PrimaryKeyRelatedField(
-        queryset=Trainer.objects.all(), required=False
-    )
+    user = UserWriteSerializer()
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
 
     class Meta:
-        model  = Mentor
-        fields = ("user","trainer")
+        model = Mentor
+        fields = ("user", "is_external", "project")
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
@@ -111,8 +124,13 @@ class MentorWriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Trainer must be supplied or inferred from the authenticated trainer."
             )
+        project = validated_data.get("project")
+        if not project:
+            raise serializers.ValidationError(
+                "Project must be supplied or inferred from the authenticated trainer."
+            )
 
-        return Mentor.objects.create(user=user, trainer=trainer)
+        return Mentor.objects.create(user=user, trainer=trainer, project=project)
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop("user", None)
@@ -121,36 +139,39 @@ class MentorWriteSerializer(serializers.ModelSerializer):
         trainer = validated_data.get("trainer")
         if trainer:
             instance.trainer = trainer
+        project = validated_data.get("project")
+        if project:
+            instance.project = project
         instance.save()
         return instance
 
 
 # ───────────────────────────────────
-# 4. APPRENTICE
+# 4. APPRENTICE SERIALIZERS
 # ───────────────────────────────────
 
+
 class ApprenticeReadSerializer(serializers.ModelSerializer):
-    user    = UserReadSerializer()
+    user = UserReadSerializer()
     trainer = serializers.PrimaryKeyRelatedField(read_only=True)
-    mentor  = serializers.PrimaryKeyRelatedField(read_only=True)
+    mentor = serializers.PrimaryKeyRelatedField(read_only=True)
+    project = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
-        model  = Apprentice
-        fields = ("user", "trainer", "mentor")
+        model = Apprentice
+        fields = ("user", "trainer", "mentor", "project")
 
 
 class ApprenticeWriteSerializer(serializers.ModelSerializer):
-    user    = UserWriteSerializer()
-    trainer = serializers.PrimaryKeyRelatedField(
-        queryset=Trainer.objects.all(), required=False
-    )
-    mentor  = serializers.PrimaryKeyRelatedField(
+    user = UserWriteSerializer()
+    mentor = serializers.PrimaryKeyRelatedField(
         queryset=Mentor.objects.all(), required=False
     )
+    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
 
     class Meta:
-        model  = Apprentice
-        fields = ("user", "trainer", "mentor")
+        model = Apprentice
+        fields = ("user", "mentor", "project")
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
@@ -168,7 +189,18 @@ class ApprenticeWriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Mentor must be supplied or inferred from the authenticated trainer."
             )
-        return Apprentice.objects.create(user=user, trainer=trainer, mentor=mentor)
+
+        project = validated_data.get("project")
+        if not project:
+            raise serializers.ValidationError(
+                "Project must be supplied or inferred from the authenticated trainer."
+            )
+        return Apprentice.objects.create(
+            user=user,
+            trainer=trainer,
+            mentor=mentor,
+            project=project,
+        )
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop("user", None)

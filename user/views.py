@@ -20,6 +20,11 @@ from .permissions import (
 from drf_yasg.utils import swagger_auto_schema
 
 
+# ───────────────────────────────────
+# 1. APPRENTICE VIEWS
+# ───────────────────────────────────
+
+
 class ApprenticeListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsTrainer]
 
@@ -122,6 +127,11 @@ class ApprenticeDetailAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# ───────────────────────────────────
+# 2. MENTOR VIEWS
+# ───────────────────────────────────
+
+
 class MentorListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsTrainer]
 
@@ -134,6 +144,7 @@ class MentorListCreateAPIView(APIView):
         },
     )
     def get(self, request):
+        # import pdb; pdb.set_trace()
         mentors = Mentor.objects.all()
         serializer = MentorReadSerializer(mentors, many=True)
         return Response(serializer.data)
@@ -159,13 +170,12 @@ class MentorDetailAPIView(APIView):
     def get_object(self, id):
         try:
             if self.request.user.is_trainer:
-                return Mentor.objects.get(user_id=id)
-
-            # If the user is a mentor: allow only when id matches their own record
-            mp = getattr(self.request.user, "mentor_profile", None)
-            if mp and str(mp.user_id) == str(id):
-                return mp
-            return Response(status=status.HTTP_403_FORBIDDEN)
+                mentor = Mentor.objects.get(user_id=id)
+                return mentor
+            elif self.request.user.is_mentor:
+                if str(self.request.user.id) == str(id):
+                    return Mentor.objects.get(user_id=self.request.user.id)
+                return Response(status=status.HTTP_403_FORBIDDEN)
         except Mentor.DoesNotExist:
             return None
 
@@ -181,8 +191,6 @@ class MentorDetailAPIView(APIView):
         mentor = self.get_object(id)
         if not mentor:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        elif isinstance(mentor, Response):
-            return mentor
         serializer = MentorReadSerializer(mentor)
         return Response(serializer.data)
 
@@ -220,6 +228,11 @@ class MentorDetailAPIView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         mentor.user.delete()  # Also deletes associated User
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# ───────────────────────────────────
+# 3. TRAINER VIEWS
+# ───────────────────────────────────
 
 
 class TrainerListCreateAPIView(APIView):

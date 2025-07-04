@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+
 import datetime
 from pathlib import Path
 
@@ -44,6 +45,11 @@ INSTALLED_APPS = [
     "corsheaders",
     # local apps
     "user",
+    "projects",
+    "tasks",
+    "rotation",
+    "feedback",
+    "request",
 ]
 
 MIDDLEWARE = [
@@ -132,10 +138,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),  # Typically longer than access token
-    'JWT_ALLOW_REFRESH': True,
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=7)
 }
 
 REST_FRAMEWORK = {
@@ -147,11 +152,7 @@ REST_FRAMEWORK = {
 
 
 SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'jwt': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        }
+    "SECURITY_DEFINITIONS": {
+        "jwt": {"type": "apiKey", "name": "Authorization", "in": "header"}
     }
 }
