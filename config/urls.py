@@ -23,6 +23,7 @@ from drf_yasg import openapi
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/user/", include("api.v1.user.urls"), name="v1"),
+    path("api/v1/projects/", include("api.v1.projects.urls"), name="v1"),
 ]
 
 schema_view = get_schema_view(

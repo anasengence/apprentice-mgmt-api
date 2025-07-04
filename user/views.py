@@ -11,7 +11,7 @@ from .serializers import (
     TrainerReadSerializer,
     TrainerWriteSerializer,
 )
-from .permissions import (
+from core.permissions import (
     IsTrainer,
     IsApprenticeOrTrainer,
     IsMentorOrTrainer,
@@ -26,7 +26,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 class ApprenticeListCreateAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsTrainer]
+    permission_classes = [IsAuthenticated, IsTrainerOrAdmin]
 
     @swagger_auto_schema(
         operation_description="List all apprentices or create a new apprentice (Trainer only).",
