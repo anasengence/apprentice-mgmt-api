@@ -12,9 +12,8 @@ from .serializers import (
     TrainerWriteSerializer,
 )
 from apps.core.permissions import (
-    IsTrainer,
-    IsApprenticeOrTrainer,
-    IsMentorOrTrainer,
+    IsApprenticeOrTrainerOrAdmin,
+    IsMentorOrTrainerOrAdmin,
     IsTrainerOrAdmin,
 )
 from drf_yasg.utils import swagger_auto_schema
@@ -55,7 +54,7 @@ class ApprenticeListCreateAPIView(APIView):
 
 
 class ApprenticeDetailAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsApprenticeOrTrainer]
+    permission_classes = [IsAuthenticated, IsApprenticeOrTrainerOrAdmin]
 
     def get_object(self, id):
         try:
@@ -133,7 +132,7 @@ class ApprenticeDetailAPIView(APIView):
 
 
 class MentorListCreateAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsTrainer]
+    permission_classes = [IsAuthenticated, IsTrainerOrAdmin]
 
     @swagger_auto_schema(
         operation_description="List all mentors or create a new mentor (Trainer only).",
@@ -165,7 +164,7 @@ class MentorListCreateAPIView(APIView):
 
 
 class MentorDetailAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsMentorOrTrainer]
+    permission_classes = [IsAuthenticated, IsMentorOrTrainerOrAdmin]
 
     def get_object(self, id):
         try:
@@ -265,7 +264,7 @@ class TrainerListCreateAPIView(APIView):
 
 
 class TrainerDetailAPIView(APIView):
-    permission_classes = [IsAuthenticated, IsTrainer]
+    permission_classes = [IsAuthenticated, IsTrainerOrAdmin]
 
     def get_object(self, id):
         try:
