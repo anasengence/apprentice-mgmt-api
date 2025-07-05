@@ -1,7 +1,6 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from apps.projects.models import Project
 
 # ───────────────────────────────────
 # 1. USER MANAGEMENT
@@ -56,7 +55,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"] 
+    REQUIRED_FIELDS = ["first_name", "last_name"]
 
     def __str__(self):
         return self.email + " " + str(self.id)
@@ -89,11 +88,9 @@ class Mentor(models.Model):
         Trainer, on_delete=models.CASCADE, related_name="mentors"
     )
     is_external = models.BooleanField(default=False)
-    project = models.ForeignKey(
-        Project,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+    project = models.ManyToManyField(
+        "projects.Project",
+        through="projects.MentorProject",
         related_name="mentors",
     )
 
@@ -127,11 +124,14 @@ class Apprentice(models.Model):
         blank=True,
         related_name="apprentices",
     )
-    project = models.ForeignKey(
-        Project,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+    project = models.ManyToManyField(
+        "projects.Project",
+        through="projects.ApprenticeProject",
+        related_name="apprentices",
+    )
+    rotations = models.ManyToManyField(
+        "rotation.Rotation",
+        through="rotation.ApprenticeRotation",
         related_name="apprentices",
     )
 

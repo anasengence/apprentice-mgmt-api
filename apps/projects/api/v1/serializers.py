@@ -6,19 +6,40 @@ import datetime
 class ProjectReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ("id", "name", "description", "start_date", "end_date", "trainer", "created_at", "updated_at", "is_external")
+        fields = (
+            "id",
+            "name",
+            "status",
+            "description",
+            "start_date",
+            "end_date",
+            "trainer",
+            "created_at",
+            "updated_at",
+            "is_external",
+        )
 
 
 class ProjectWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ("id", "name", "description", "start_date", "end_date", "trainer", "is_external")
-    
+        fields = (
+            "id",
+            "name",
+            "status",
+            "description",
+            "start_date",
+            "end_date",
+            "trainer",
+            "is_external",
+        )
+
     def create(self, validated_data):
         return Project.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
+        instance.status = validated_data.get("status", instance.status)
         instance.description = validated_data.get("description", instance.description)
         instance.start_date = validated_data.get("start_date", instance.start_date)
         instance.end_date = validated_data.get("end_date", instance.end_date)

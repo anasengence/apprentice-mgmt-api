@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Department, Rotation, ApprenticeRotation
 
-# Register your models here.
+admin.site.register(Department)
+admin.site.register(Rotation)
+admin.site.register(ApprenticeRotation)
