@@ -24,6 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/user/", include("apps.user.api.v1.urls"), name="v1"),
     path("api/v1/projects/", include("apps.projects.api.v1.urls"), name="v1"),
+    path("api/v1/tasks/", include("apps.tasks.api.v1.urls"), name="v1"),
 ]
 
 schema_view = get_schema_view(

@@ -88,10 +88,12 @@ class Mentor(models.Model):
         Trainer, on_delete=models.CASCADE, related_name="mentors"
     )
     is_external = models.BooleanField(default=False)
-    project = models.ManyToManyField(
+    project = models.ForeignKey(
         "projects.Project",
-        through="projects.MentorProject",
         related_name="mentors",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
@@ -124,10 +126,12 @@ class Apprentice(models.Model):
         blank=True,
         related_name="apprentices",
     )
-    project = models.ManyToManyField(
+    project = models.ForeignKey(
         "projects.Project",
-        through="projects.ApprenticeProject",
         related_name="apprentices",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     rotations = models.ManyToManyField(
         "rotation.Rotation",
