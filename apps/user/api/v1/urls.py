@@ -13,8 +13,16 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    path("apprentices/", ApprenticeListCreateAPIView.as_view(), name="apprentice-list-create"),
-    path("apprentices/<int:id>/", ApprenticeDetailAPIView.as_view(), name="apprentice-detail"),
+    path(
+        "apprentices/",
+        ApprenticeListCreateAPIView.as_view(),
+        name="apprentice-list-create",
+    ),
+    path(
+        "apprentices/<int:id>/",
+        ApprenticeDetailAPIView.as_view(),
+        name="apprentice-detail",
+    ),
     path("mentors/", MentorListCreateAPIView.as_view(), name="mentor-list-create"),
     path("mentors/<int:id>/", MentorDetailAPIView.as_view(), name="mentor-detail"),
     path("trainers/", TrainerListCreateAPIView.as_view(), name="trainer-list-create"),

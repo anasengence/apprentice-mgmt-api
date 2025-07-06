@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 
+
 class IsMentor(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_mentor
@@ -23,7 +24,11 @@ class IsTrainerOrAdmin(BasePermission):
 
 class IsApprenticeOrTrainerOrAdmin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_trainer or request.user.is_apprentice or request.user.is_staff
+        return (
+            request.user.is_trainer
+            or request.user.is_apprentice
+            or request.user.is_staff
+        )
 
     def has_object_permission(self, request, view, obj):
         return obj.user == request.user
@@ -31,4 +36,6 @@ class IsApprenticeOrTrainerOrAdmin(BasePermission):
 
 class IsMentorOrTrainerOrAdmin(BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_trainer or request.user.is_mentor or request.user.is_staff
+        return (
+            request.user.is_trainer or request.user.is_mentor or request.user.is_staff
+        )

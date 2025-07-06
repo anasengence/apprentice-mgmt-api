@@ -13,6 +13,7 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
+
 class Rotation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
@@ -28,11 +29,30 @@ class Rotation(models.Model):
     def __str__(self):
         return self.name + " " + self.department.name + " " + str(self.id)
 
+
 class ApprenticeRotation(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    rotation = models.ForeignKey(Rotation, on_delete=models.CASCADE, related_name="apprentice_rotations")
-    apprentice = models.ForeignKey(Apprentice, on_delete=models.CASCADE, related_name="rotation_assignments")
-    status = models.CharField(max_length=20, choices=[("at_halt", "At Halt"), ("in_progress", "In Progress"), ("completed", "Completed")], default="at_halt")
+    rotation = models.ForeignKey(
+        Rotation, on_delete=models.CASCADE, related_name="apprentice_rotations"
+    )
+    apprentice = models.ForeignKey(
+        Apprentice, on_delete=models.CASCADE, related_name="rotation_assignments"
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ("at_halt", "At Halt"),
+            ("in_progress", "In Progress"),
+            ("completed", "Completed"),
+        ],
+        default="at_halt",
+    )
 
     def __str__(self):
-        return self.rotation.name + " " + self.apprentice.user.first_name + " " + self.apprentice.user.last_name
+        return (
+            self.rotation.name
+            + " "
+            + self.apprentice.user.first_name
+            + " "
+            + self.apprentice.user.last_name
+        )
