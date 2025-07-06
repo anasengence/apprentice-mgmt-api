@@ -28,6 +28,7 @@ class ApprenticeListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsTrainerOrAdmin]
 
     @swagger_auto_schema(
+        operation_summary="List all apprentices or create a new apprentice",
         operation_description="List all apprentices or create a new apprentice (Trainer only).",
         responses={
             200: ApprenticeReadSerializer(many=True),
@@ -41,6 +42,7 @@ class ApprenticeListCreateAPIView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
+        operation_summary="Create a new apprentice",
         operation_description="Create a new apprentice (Trainer only).",
         responses={201: ApprenticeWriteSerializer(), 400: "Bad Request"},
         request_body=ApprenticeWriteSerializer,
@@ -70,7 +72,8 @@ class ApprenticeDetailAPIView(APIView):
             return None
 
     @swagger_auto_schema(
-        operation_description="Retrieve, update, or delete a specific apprentice (Trainer only).",
+        operation_summary="Retrieve a specific apprentice",
+        operation_description="Retrieve a specific apprentice (Trainer only).",
         responses={
             200: ApprenticeReadSerializer(),
             201: ApprenticeWriteSerializer(),
@@ -87,6 +90,7 @@ class ApprenticeDetailAPIView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
+        operation_summary="Update a specific apprentice",
         operation_description="Update a specific apprentice (Trainer only).",
         responses={
             200: ApprenticeReadSerializer(),
@@ -110,6 +114,7 @@ class ApprenticeDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
+        operation_summary="Delete a specific apprentice",
         operation_description="Delete a specific apprentice (Trainer only).",
         responses={
             200: ApprenticeReadSerializer(),
@@ -137,6 +142,7 @@ class MentorListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsTrainerOrAdmin]
 
     @swagger_auto_schema(
+        operation_summary="List all mentors or create a new mentor",
         operation_description="List all mentors or create a new mentor (Trainer only).",
         responses={
             200: MentorReadSerializer(many=True),
@@ -151,6 +157,7 @@ class MentorListCreateAPIView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
+        operation_summary="Create a new mentor",
         operation_description="Create a new mentor (Trainer only).",
         responses={201: MentorWriteSerializer(), 400: "Bad Request"},
         request_body=MentorWriteSerializer,
@@ -181,7 +188,8 @@ class MentorDetailAPIView(APIView):
             return None
 
     @swagger_auto_schema(
-        operation_description="Retrieve, update, or delete a specific mentor (Trainer only).",
+        operation_summary="Retrieve a specific mentor",
+        operation_description="Retrieve a specific mentor (Trainer only).",
         responses={
             200: MentorReadSerializer(),
             201: MentorWriteSerializer(),
@@ -196,6 +204,7 @@ class MentorDetailAPIView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
+        operation_summary="Update a specific mentor",
         operation_description="Update a specific mentor (Trainer only).",
         responses={
             200: MentorReadSerializer(),
@@ -215,6 +224,7 @@ class MentorDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
+        operation_summary="Delete a specific mentor",
         operation_description="Delete a specific mentor (Trainer only).",
         responses={
             200: MentorReadSerializer(),
@@ -240,6 +250,7 @@ class TrainerListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsTrainerOrAdmin]
 
     @swagger_auto_schema(
+        operation_summary="List all trainers or create a new trainer",
         operation_description="List all trainers or create a new trainer (Trainer only).",
         responses={
             200: TrainerReadSerializer(many=True),
@@ -253,6 +264,7 @@ class TrainerListCreateAPIView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
+        operation_summary="Create a new trainer",
         operation_description="Create a new trainer (Trainer only).",
         responses={201: TrainerWriteSerializer(), 400: "Bad Request"},
         request_body=TrainerWriteSerializer,
@@ -275,7 +287,8 @@ class TrainerDetailAPIView(APIView):
             return None
 
     @swagger_auto_schema(
-        operation_description="Retrieve, update, or delete a specific trainer (Trainer only).",
+        operation_summary="Retrieve a specific trainer",
+        operation_description="Retrieve a specific trainer (Trainer only).",
         responses={
             200: TrainerReadSerializer(),
             201: TrainerWriteSerializer(),
@@ -291,6 +304,7 @@ class TrainerDetailAPIView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
+        operation_summary="Update a specific trainer",
         operation_description="Update a specific trainer (Trainer only).",
         responses={
             200: TrainerReadSerializer(),
@@ -310,6 +324,7 @@ class TrainerDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
+        operation_summary="Delete a specific trainer",
         operation_description="Delete a specific trainer (Trainer only).",
         responses={
             200: TrainerReadSerializer(),

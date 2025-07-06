@@ -12,6 +12,7 @@ class ProjectListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated, IsTrainerOrAdmin]
 
     @swagger_auto_schema(
+        operation_summary="List all projects or create a new project",
         operation_description="List all projects or create a new project (Trainer only).",
         responses={
             200: ProjectReadSerializer(many=True),
@@ -25,6 +26,7 @@ class ProjectListCreateAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
+        operation_summary="Create a new project",
         operation_description="Create a new project (Trainer only).",
         responses={201: ProjectWriteSerializer(), 400: "Bad Request"},
         request_body=ProjectWriteSerializer,
@@ -47,7 +49,8 @@ class ProjectDetailAPIView(APIView):
             return None
 
     @swagger_auto_schema(
-        operation_description="Retrieve, update, or delete a specific project (Trainer only).",
+        operation_summary="Retrieve a specific project",
+        operation_description="Retrieve a specific project (Trainer only).",
         responses={
             200: ProjectReadSerializer(),
             201: ProjectWriteSerializer(),
@@ -62,6 +65,7 @@ class ProjectDetailAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
+        operation_summary="Update a specific project",
         operation_description="Update a specific project (Trainer only).",
         responses={
             200: ProjectReadSerializer(),
@@ -81,6 +85,7 @@ class ProjectDetailAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
+        operation_summary="Delete a specific project",
         operation_description="Delete a specific project (Trainer only).",
         responses={
             200: ProjectReadSerializer(),

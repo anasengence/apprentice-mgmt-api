@@ -9,7 +9,11 @@ from drf_yasg.utils import swagger_auto_schema
 
 class TaskListCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
-    @swagger_auto_schema(responses={200: TaskReadSerializer(many=True)})
+    @swagger_auto_schema(
+        operation_summary="Get all tasks",
+        operation_description="Get all tasks (Apprentice, Mentor, Trainer)",
+        responses={200: TaskReadSerializer(many=True)}
+    )
     def get(self, request):
         if request.user.is_trainer:
             tasks = Task.objects.all()
@@ -21,6 +25,8 @@ class TaskListCreateAPIView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
+        operation_summary="Create a task",
+        operation_description="Create a task (Mentor only)",
         request_body=TaskWriteSerializer, responses={201: TaskReadSerializer}
     )
     def post(self, request):
@@ -47,7 +53,11 @@ class TaskDetailAPIView(APIView):
         except Task.DoesNotExist:
             return None
 
-    @swagger_auto_schema(responses={200: TaskReadSerializer})
+    @swagger_auto_schema(
+        operation_summary="Get a task",
+        operation_description="Get a task (Apprentice, Mentor, Trainer)",
+        responses={200: TaskReadSerializer}
+    )
     def get(self, request, pk):
         task = self.get_object(pk)
         if not task:
@@ -56,6 +66,8 @@ class TaskDetailAPIView(APIView):
         return Response(serializer.data)
 
     @swagger_auto_schema(
+        operation_summary="Update a task",
+        operation_description="Update a task (Mentor only)",
         request_body=TaskWriteSerializer, responses={200: TaskReadSerializer}
     )
     def put(self, request, pk):
@@ -68,7 +80,11 @@ class TaskDetailAPIView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(responses={204: "No Content"})
+    @swagger_auto_schema(
+        operation_summary="Delete a task",
+        operation_description="Delete a task (Mentor only)",
+        responses={204: "No Content"}
+    )
     def delete(self, request, pk):
         if request.user.is_apprentice:
             return Response(status=status.HTTP_403_FORBIDDEN)
