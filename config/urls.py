@@ -9,6 +9,7 @@ urlpatterns = [
     path("api/v1/tasks/", include("apps.tasks.api.v1.urls"), name="v1"),
     path("api/v1/requests/", include("apps.request.api.v1.urls"), name="v1"),
     path("api/v1/projects/", include("apps.projects.api.v1.urls"), name="v1"),
+    path("api/v1/feedback/", include("apps.feedback.api.v1.urls"), name="v1"),
 ]
 
 schema_view = get_schema_view(
